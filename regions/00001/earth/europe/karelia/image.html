@@ -3,28 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Converting GEOJSON to PNG</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <title>GEOJSON to PNG/SVG</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
 </head>
 <body>
-    <div id="map" style="width: 600px; height: 400px;"></div>
+    <div id="map" style="width: 600px; height: 400px;">
+        <!-- Your map content here -->
+    </div>
+    <button id="exportPNG">Export to PNG</button>
+    <button id="exportSVG">Export to SVG</button>
+    <div id="exportedImage"></div>
 
     <script>
-        var map = L.map('map').setView([51.505, -0.09], 13);
+        var map = document.getElementById('map');
+        var exportPNG = document.getElementById('exportPNG');
+        var exportSVG = document.getElementById('exportSVG');
+        var exportedImage = document.getElementById('exportedImage');
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-        }).addTo(map);
+        exportPNG.addEventListener('click', function () {
+            html2canvas(map).then(function(canvas) {
+                var image = new Image();
+                image.src = canvas.toDataURL('image/png');
+                exportedImage.appendChild(image);
+            });
+        });
 
-        // Load your GEOJSON data here and add it as a layer to the map
-
-        // Create a screenshot of the map
-        map.on('load', function() {
-            setTimeout(function() {
-                map.invalidateSize();
-                map.saveImage('screenshot.png');
-            }, 1000); // Adjust the delay as needed
+        exportSVG.addEventListener('click', function () {
+            // Code to export to SVG (custom implementation required)
         });
     </script>
 </body>
