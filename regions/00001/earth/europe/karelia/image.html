@@ -29,22 +29,7 @@
         }).addTo(map);
 
         // Wczytaj plik GeoJSON
-        var geojsonFeature = {
-            type: "Feature",
-            properties: {},
-            geometry: {
-                type: "Polygon",
-                coordinates: [
-                    [
-                        [-77.035889, 38.995603],
-                        [-76.909393, 38.995603],
-                        [-76.909393, 38.887615],
-                        [-77.035889, 38.887615],
-                        [-77.035889, 38.995603]
-                    ]
-                ]
-            }
-        };
+        var geojsonFeature = fetch('polygon.geojson');
 
         var geojsonLayer = L.geoJSON(geojsonFeature).addTo(map);
 
