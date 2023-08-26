@@ -1,39 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Wizualizacja GeoJSON</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Converting GEOJSON to PNG</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 </head>
 <body>
-    <canvas id="myCanvas" width="400" height="400"></canvas>
+    <div id="map" style="width: 600px; height: 400px;"></div>
 
     <script>
-        var canvas = document.getElementById("myCanvas");
-        var ctx = canvas.getContext("2d");
+        var map = L.map('map').setView([51.505, -0.09], 13);
 
-        fetch('polygon.geojson')
-            .then(response => response.json())
-            .then(data => {
-                var coordinates = data.features[0].geometry.coordinates[0]; // Załóżmy, że polygon jest pierwszym obiektem w pliku GeoJSON
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
 
-                ctx.beginPath();
-                coordinates.forEach(function(coordinate, index) {
-                    var x = coordinate[0];
-                    var y = coordinate[1];
-                    if (index === 0) {
-                        ctx.moveTo(x, y);
-                    } else {
-                        ctx.lineTo(x, y);
-                    }
-                });
-                ctx.closePath();
+        // Load your GEOJSON data here and add it as a layer to the map
 
-                ctx.strokeStyle = 'blue'; // Kolor konturu
-                ctx.lineWidth = 2; // Grubość konturu
-                ctx.stroke();
-            })
-            .catch(error => {
-                console.error('Błąd wczytywania pliku GeoJSON:', error);
-            });
+        // Create a screenshot of the map
+        map.on('load', function() {
+            setTimeout(function() {
+                map.invalidateSize();
+                map.saveImage('screenshot.png');
+            }, 1000); // Adjust the delay as needed
+        });
     </script>
 </body>
 </html>
