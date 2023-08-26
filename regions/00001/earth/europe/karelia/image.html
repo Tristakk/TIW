@@ -6,18 +6,29 @@
 <body>
   <div id="map"></div>
   <script>
-    fetch('polygon.geojson')
-      .then(response => response.json())
-      .then(data => {
-        const svgNS = "http://www.w3.org/2000/svg";
-        const svg = document.createElementNS(svgNS, 'svg');
-        const path = document.createElementNS(svgNS, 'path');
-        path.setAttribute('d', data.features[0].geometry.coordinates); // Tu załóżmy, że mamy tylko jeden Polygon w GeoJSON
-        svg.appendChild(path);
-        document.getElementById('map').appendChild(svg);
-      })
-      .catch(error => console.error(error));
+    const geojson = {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [0, 0],
+            [0, 1],
+            [1, 1],
+            [1, 0],
+            [0, 0]
+          ]
+        ]
+      }
+    };
+
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNS, 'svg');
+    const path = document.createElementNS(svgNS, 'path');
+
+    path.setAttribute('d', 'M0 0 L0 100 L100 100 L100 0 Z'); // W tym miejscu ustaw ścieżkę SVG
+    svg.appendChild(path);
+    document.getElementById('map').appendChild(svg);
   </script>
 </body>
 </html>
-
