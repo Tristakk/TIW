@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wizualizacja GeoJSON</title>
+</head>
+<body>
+    <canvas id="myCanvas" width="400" height="400"></canvas>
+
+    <script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+
+        fetch('polygon.geojson')
+            .then(response => response.json())
+            .then(data => {
+                var coordinates = data.features[0].geometry.coordinates[0]; // Załóżmy, że polygon jest pierwszym obiektem w pliku GeoJSON
+
+                ctx.beginPath();
+                coordinates.forEach(function(coordinate, index) {
+                    var x = coordinate[0];
+                    var y = coordinate[1];
+                    if (index === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                });
+                ctx.closePath();
+
+                ctx.strokeStyle = 'blue'; // Kolor konturu
+                ctx.lineWidth = 2; // Grubość konturu
+                ctx.stroke();
+            })
+            .catch(error => {
+                console.error('Błąd wczytywania pliku GeoJSON:', error);
+            });
+    </script>
+</body>
+</html>
