@@ -1,36 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GEOJSON to PNG/SVG</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+  <title>GeoJSON to SVG</title>
 </head>
 <body>
-    <div id="map" style="width: 600px; height: 400px;">
-        <!-- Your map content here -->
-    </div>
-    <button id="exportPNG">Export to PNG</button>
-    <button id="exportSVG">Export to SVG</button>
-    <div id="exportedImage"></div>
-
-    <script>
-        var map = document.getElementById('map');
-        var exportPNG = document.getElementById('exportPNG');
-        var exportSVG = document.getElementById('exportSVG');
-        var exportedImage = document.getElementById('exportedImage');
-
-        exportPNG.addEventListener('click', function () {
-            html2canvas(map).then(function(canvas) {
-                var image = new Image();
-                image.src = canvas.toDataURL('image/png');
-                exportedImage.appendChild(image);
-            });
-        });
-
-        exportSVG.addEventListener('click', function () {
-            // Code to export to SVG (custom implementation required)
-        });
-    </script>
+  <div id="map"></div>
+  <script>
+    fetch('polygon.geojson')
+      .then(response => response.json())
+      .then(data => {
+        const svgNS = "http://www.w3.org/2000/svg";
+        const svg = document.createElementNS(svgNS, 'svg');
+        const path = document.createElementNS(svgNS, 'path');
+        path.setAttribute('d', data.features[0].geometry.coordinates); // Tu załóżmy, że mamy tylko jeden Polygon w GeoJSON
+        svg.appendChild(path);
+        document.getElementById('map').appendChild(svg);
+      })
+      .catch(error => console.error(error));
+  </script>
 </body>
 </html>
+
